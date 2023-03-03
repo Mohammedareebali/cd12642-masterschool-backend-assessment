@@ -7,10 +7,12 @@ require('./config/db');
 const userRoutes = require('./routes/userRoutes')
 const authMiddleware = require('./middleware/authMiddleware');
 const jwt = require('jsonwebtoken');
+const favoriteRoutes = require('./routes/favoritesRoutes')
 const User = require('./models/userModel');
 app.use(express.json());
 app.use('/api/photos', photoRoutes);
 app.use(userRoutes);
+app.use(favoriteRoutes);
 app.get('/', (req, res) => {
   res.status(200).json({ message: "Welcome to the Unsplash API!" });
 });

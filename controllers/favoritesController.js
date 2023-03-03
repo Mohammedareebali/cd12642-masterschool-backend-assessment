@@ -1,2 +1,71 @@
-//Import asyncHandler so that we can use it in our routes to trigger error handling middleware
 const asyncHandler = require("express-async-handler");
+const FavoritePhoto = require('../models/favoritePhotoModel')
+
+const addFavorite = asyncHandler(async (req, res) => {
+    const { url, description, username, explanation } = req.body;
+    const { userId } = req;
+  
+    const newPhoto = new FavoritePhoto({
+      user: userId,
+      url,
+      description,
+      username,
+      explanation
+    });
+  
+    const savedPhoto = await newPhoto.save();
+  
+    res.status(201).json(savedPhoto);
+  });
+const getFavorite = asyncHandler(async (req, res) => {
+    const { userId } = req;
+    const favoritePhotos = await FavoritePhoto.find({ user: userId });
+    res.json(favoritePhotos);
+  })
+  const removeFavorite = asyncHandler(async (req, res) => {
+    const { userId } = req;
+    const { photoId } = req.params;
+  
+    // Find the favorite photo by ID and user ID
+    const favoritePhoto = await FavoritePhoto.findOne({ _id: photoId, user: userId });
+  
+    if (!favoritePhoto) {
+      // If the favorite photo was not found, return a 404 error
+      res.status(404);
+      throw new Error('Favorite photo not found');
+    }
+  
+    // Delete the favorite photo from the database
+    await favoritePhoto.remove();
+  
+    // Return a success message to the client
+    res.json({ message: 'Favorite photo removed' });
+  })
+  // edit favorite
+  const editFavorite = 
+  // Add a new route that allows a user to edit the description of a favorite photo
+ asyncHandler(async (req, res) => {
+    const { userId } = req;
+    const { photoId } = req.params;
+    const { description } = req.body;
+  
+    // Find the favorite photo by ID and user ID
+    const favoritePhoto = await FavoritePhoto.findOne({ _id: photoId, user: userId });
+  
+    if (!favoritePhoto) {
+      // If the favorite photo was not found, return a 404 error
+      res.status(404);
+      throw new Error('Favorite photo not found');
+    }
+  
+    // Update the description of the favorite photo
+    favoritePhoto.description = description;
+    const updatedPhoto = await favoritePhoto.save();
+  
+    // Return the updated photo to the client
+    res.json(updatedPhoto);
+  })
+  ;
+module.exports = {
+  addFavorite,getFavorite,removeFavorite,editFavorite
+};
