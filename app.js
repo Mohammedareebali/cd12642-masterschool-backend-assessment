@@ -1,7 +1,10 @@
 const express = require('express');
 
+const { PORT } = require('dotenv').config({
+    path:'./dev.env'
+})
 const app = express();
-const port = 3000;
+
 const photoRoutes = require('./routes/photoRoutes');
 require('./config/db');
 const userRoutes = require('./routes/userRoutes')
@@ -10,6 +13,7 @@ const jwt = require('jsonwebtoken');
 const favoriteRoutes = require('./routes/favoritesRoutes')
 const User = require('./models/userModel');
 app.use(express.json());
+
 app.use('/api/photos', photoRoutes);
 app.use(userRoutes);
 app.use(favoriteRoutes);
@@ -38,6 +42,10 @@ app.get('/me', authMiddleware, async (req, res) => {
   }
 });
 
-app.listen(port, () => {
-  console.log(`Server listening on port ${port}`);
+app.listen(process.env.PORT, () => {
+  console.log(`Server listening on port ${process.env.PORT}`);
 });
+
+const errorHandler = require('./middleware/errorMiddleware');
+app.use(errorHandler);
+

@@ -15,13 +15,15 @@ const addFavorite = asyncHandler(async (req, res) => {
   
     const savedPhoto = await newPhoto.save();
   
-    res.status(201).json(savedPhoto);
+    res.status(200).json(savedPhoto);
   });
+  //getFavorite 
 const getFavorite = asyncHandler(async (req, res) => {
     const { userId } = req;
     const favoritePhotos = await FavoritePhoto.find({ user: userId });
     res.json(favoritePhotos);
-  })
+  });
+  //removeFavorite
   const removeFavorite = asyncHandler(async (req, res) => {
     const { userId } = req;
     const { photoId } = req.params;
@@ -29,11 +31,7 @@ const getFavorite = asyncHandler(async (req, res) => {
     // Find the favorite photo by ID and user ID
     const favoritePhoto = await FavoritePhoto.findOne({ _id: photoId, user: userId });
   
-    if (!favoritePhoto) {
-      // If the favorite photo was not found, return a 404 error
-      res.status(404);
-      throw new Error('Favorite photo not found');
-    }
+   
   
     // Delete the favorite photo from the database
     await favoritePhoto.remove();
@@ -52,11 +50,7 @@ const getFavorite = asyncHandler(async (req, res) => {
     // Find the favorite photo by ID and user ID
     const favoritePhoto = await FavoritePhoto.findOne({ _id: photoId, user: userId });
   
-    if (!favoritePhoto) {
-      // If the favorite photo was not found, return a 404 error
-      res.status(404);
-      throw new Error('Favorite photo not found');
-    }
+    
   
     // Update the description of the favorite photo
     favoritePhoto.description = description;
