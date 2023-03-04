@@ -23,7 +23,6 @@ const getFavorite = asyncHandler(async (req, res) => {
     const favoritePhotos = await FavoritePhoto.find({ user: userId });
     res.json(favoritePhotos);
   });
-  //removeFavorite
   const removeFavorite = asyncHandler(async (req, res) => {
     const { userId } = req;
     const { photoId } = req.params;
