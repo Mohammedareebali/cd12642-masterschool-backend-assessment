@@ -1,6 +1,8 @@
 const asyncHandler = require("express-async-handler");
 const FavoritePhoto = require('../models/favoritePhotoModel')
-
+require('dotenv').config({
+  path:'../dev.env'
+})
 const addFavorite = asyncHandler(async (req, res) => {
     const { url, description, username, explanation } = req.body;
     const { userId } = req;

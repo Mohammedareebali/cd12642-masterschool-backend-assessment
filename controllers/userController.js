@@ -1,9 +1,16 @@
 //Import asyncHandler so that we can use it in our routes to trigger error handling middleware
 const asyncHandler = require("express-async-handler");
+require('dotenv').config({
+  path:'../dev.env'
+});
+const User = require('../models/userModel');
+const TokenBlacklist = require('../models/TokenBlacklist');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 //register
 const register = asyncHandler(async (req, res) => {
-    const { username, email, password } =  (req).query;
-  
+    const { username, email, password } =  req.body;
+console.log(req.body.username)
   
     try {
       // Check if user with given email exists
@@ -27,18 +34,19 @@ const register = asyncHandler(async (req, res) => {
       await newUser.save();
   
       // Create and sign JWT token
-      const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
+      const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET);
   
       res.status(201).json({ token });
     } catch (err) {
       console.error(err);
-      res.status(500).json({ message: 'Server Error' });
+      console.log(err)
+      res.status(500).json({ message: err });
     }
   });
   //login 
   const login = asyncHandler(async (req, res) => {
-    //used req.query for testing postman ohterwise use req.body
-      const { email, password } = req.query;
+    //used req.body for testing postman 
+      const { email, password } = req.body;
      
     
     try {

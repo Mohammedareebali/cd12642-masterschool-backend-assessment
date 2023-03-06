@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const { JWT_SECRET } = require('dotenv').config({
     path:'../dev.env'
-})
+});
 
 function authMiddleware(req, res, next) {
   // Get the token from the request header
