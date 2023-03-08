@@ -16,14 +16,12 @@ const authMiddleware = asyncHandler( async (req, res, next) =>{
     return res.status(401).json({ error: 'the Invalid token' });
   }
 
-  try {
+  
     // Verify the token with the JWT_SECRET and attach the user to the request object
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.userId = decoded.userId;
     next();
-  } catch (err) {
-    return res.status(401).json({ error: 'Invalid token' });
-  }
+
 });
 
 module.exports = authMiddleware;
