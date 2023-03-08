@@ -54,10 +54,15 @@ const rawPhotoUrl = async (req, res) => {
       });
       res.status(200).json(photos);
     } catch (error) {
-      console.error(error);
-      res.status(error.response.status).json({ message: error.response.data });
+      
+      if (error.response) {
+        res.status(error.response.status).json({ message: error.response.data });
+      } else {
+        res.status(500).json({ message: "Network error. Please check your internet connection." });
+      }
     }
   }
+
   module.exports ={
     rawPhotoUrl,photoBasedId,photoBasedUsername
   }

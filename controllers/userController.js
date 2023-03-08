@@ -34,9 +34,9 @@ console.log(req.body.username)
       await newUser.save();
   
       // Create and sign JWT token
-      const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET);
+    
   
-      res.status(201).json({ token });
+      res.status(201).json({message : `new user created`});
     } catch (err) {
       console.error(err);
       console.log(err)
